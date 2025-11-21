@@ -1,30 +1,38 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven3'  // Name MUST match Tools name exactly
+    // Parameters for the build
+    parameters {
+        booleanParam(
+            name: 'executeTests',
+            defaultValue: true,
+            description: 'Run Test stage?'
+        )
     }
 
     stages {
+
         stage('Build') {
             steps {
                 echo 'Building...'
-                bat "mvn -v"
+                // Your build commands here
             }
         }
 
         stage('Test') {
             when {
-                expression { return true }
+                // Test stage runs only if executeTests is true
+                expression { params.executeTests }
             }
             steps {
-                echo "Testing only when condition is true"
+                echo "Testing only because executeTests = true"
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
+                // Your deploy commands here
             }
         }
     }
