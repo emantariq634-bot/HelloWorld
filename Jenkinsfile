@@ -4,21 +4,29 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
-                // Here you can define commands for your build
+                echo 'Building...'
+                // Your build commands here
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Testing..'
-                // Here you can define commands for your tests
+                echo 'Testing...'
+                // Your test commands here
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
-                // Here you can define commands for your deployment
+                echo 'Deploying...'
+                // Your deploy commands here
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Build completed! (Post section ran.)'
         }
     }
 }
