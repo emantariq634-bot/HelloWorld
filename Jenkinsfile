@@ -1,41 +1,37 @@
 pipeline {
     agent any
 
-    // Environment Variables (custom)
-    environment {
-        APP_NAME    = "MySampleApp"
-        APP_VERSION = "1.0.0"
+    tools {
+        maven 'Maven3'  // Name MUST match Tools name exactly
     }
 
     stages {
-
         stage('Build') {
             steps {
-                echo "Building ${APP_NAME} version ${APP_VERSION}..."
-                // Your build commands here
+                echo 'Building...'
+                bat "mvn -v"
             }
         }
 
         stage('Test') {
             when {
-                expression { return true }   // change this condition when needed
+                expression { return true }
             }
             steps {
-                echo "Testing ${APP_NAME} version ${APP_VERSION} (condition is true)..."
+                echo "Testing only when condition is true"
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying ${APP_NAME} version ${APP_VERSION}..."
-                // Your deploy commands here
+                echo 'Deploying...'
             }
         }
     }
 
     post {
         always {
-            echo "Build completed for ${APP_NAME} version ${APP_VERSION}! (Post section ran.)"
+            echo 'Build completed! (Post section ran.)'
         }
     }
 }
