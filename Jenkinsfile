@@ -1,45 +1,18 @@
 pipeline {
     agent any
 
-    // Parameters for the build
-    parameters {
-        booleanParam(
-            name: 'executeTests',
-            defaultValue: true,
-            description: 'Run Test stage?'
-        )
-    }
-
     stages {
-
-        stage('Build') {
+        stage('Secure API Call') {
             steps {
-                echo 'Building...'
-                // Your build commands here
+                script {
+                    withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GH_TOKEN')]) {
+                        sh '''
+                            echo "Calling GitHub API securely..."
+                            curl -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/user
+                        '''
+                    }
+                }
             }
-        }
-
-        stage('Test') {
-            when {
-                // Test stage runs only if executeTests is true
-                expression { params.executeTests }
-            }
-            steps {
-                echo "Testing only because executeTests = true"
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // Your deploy commands here
-            }
-        }
-    }
-
-    post {
-        always {
-            echo 'Build completed! (Post section ran.)'
         }
     }
 }
